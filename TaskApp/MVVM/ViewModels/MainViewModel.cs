@@ -35,14 +35,14 @@ namespace TaskApp.MVVM.ViewModels
                 {
                     Id = 1,
                     CategoryName = "Cleaning",
-                    Color = "#007BFF"
+                    Color = "#ff0000"
                 },
 
                 new Category
                 {
                     Id = 2,
                     CategoryName = "School/Work",
-                    Color = " #880808"
+                    Color = "#7393B3"
                 },
 
                 new Category
