@@ -29,7 +29,7 @@
                                             <Span Text="{Binding PendingTasks}" FontAttributes="None" />
                                             <Span Text="/" FontAttributes="None" />
                                             <Span Text="{Binding TotalTasks}" FontAttributes="None" />
-                                            <Span Text=" tasks completed" FontAttributes="None" />
+                                            <Span Text=" tasks remaining" FontAttributes="None" />
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>
