@@ -40,7 +40,6 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
         </Grid>
         
         <Grid Grid.Row="2" RowDefinitions=".2*,.8*">
