@@ -1,61 +1,67 @@
 using TaskApp.MVVM.Models;
 using TaskApp.MVVM.ViewModels;
+using System;
+using System.Linq;
 
-namespace TaskApp.MVVM.Views;
-
-public partial class NewTaskView : ContentPage
+namespace TaskApp.MVVM.Views
 {
-	public NewTaskView()
-	{
-		InitializeComponent();
-	}
-
-    private async void btnAddTask_Clicked(object sender, EventArgs e)
+    public partial class NewTaskView : ContentPage
     {
-        var vm = BindingContext as NewTaskViewModel;
-        var selectedCategory = 
-            vm.Categories.Where(x => x.IsSelected == true).FirstOrDefault();
-
-        if (selectedCategory != null)
+        public NewTaskView()
         {
-            var task = new MyTask
-            {
-                TaskName = vm.Task,
-                CategoryId = selectedCategory.Id
-            };
-
-            vm.Tasks.Add(task);
-            await Navigation.PopAsync();
+            InitializeComponent();
         }
-        else
+
+        private async void btnAddTask_Clicked(object sender, EventArgs e)
         {
-            await DisplayAlert("Invalide Selection", "You must select a category", "OK");
-        };
-    }
+            var vm = BindingContext as NewTaskViewModel;
+            var selectedCategory = vm.Categories.Where(x => x.IsSelected).FirstOrDefault();
 
-    private async void btnAddCategory_Clicked(object sender, EventArgs e)
-    {
-        var vm = BindingContext as NewTaskViewModel;
+            if (selectedCategory != null)
+            {
+                var task = new MyTask
+                {
+                    TaskName = vm.Task,
+                    CategoryId = selectedCategory.Id,
+                    TaskColor = selectedCategory.Color
+                };
 
-        string category = 
-            await DisplayPromptAsync("New Category",
-            "Write the category name", 
-            maxLength: 50,
-            keyboard: Keyboard.Text);
+                vm.Tasks.Add(task);
 
-        var r = new Random();
+                // Manually call UpdateData from MainViewModel
+                var mainViewModel = App.Current.MainPage.BindingContext as MainViewModel;
+                mainViewModel.UpdateData();
 
-        if(!string.IsNullOrEmpty(category))
+                await Navigation.PopAsync();
+            }
+            else
+            {
+                await DisplayAlert("Invalid Selection", "You must select a category", "OK");
+            }
+        }
+
+        private async void btnAddCategory_Clicked(object sender, EventArgs e)
         {
-            vm.Categories.Add(
-                new Category
+            var vm = BindingContext as NewTaskViewModel;
+
+            string category = await DisplayPromptAsync("New Category", "Write the category name", maxLength: 50, keyboard: Keyboard.Text);
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                var random = new Random(); // Create a Random instance
+
+                var newCategory = new Category
                 {
                     Id = vm.Categories.Max(x => x.Id) + 1,
-                    Color = Color.FromRgb(r.Next(0,255), 
-                                          r.Next(0,255),
-                                          r.Next(255,255)).ToHex(),
+                    Color = Color.FromRgb(random.Next(0, 255), random.Next(0, 255), random.Next(0, 255)).ToHex(), // Use 'random' to generate colors
                     CategoryName = category
-                });
-        };
+                };
+                vm.Categories.Add(newCategory);
+
+                // Manually call UpdateData from MainViewModel
+                var mainViewModel = App.Current.MainPage.BindingContext as MainViewModel;
+                mainViewModel.UpdateData();
+            }
+        }
     }
 }

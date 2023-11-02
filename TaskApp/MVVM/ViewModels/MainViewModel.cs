@@ -1,12 +1,8 @@
-﻿using TaskApp.MVVM.Models;
+﻿using System.Collections.ObjectModel;
+using TaskApp.MVVM.Models;
 using PropertyChanged;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TaskApp.MVVM.ViewModels
 {
@@ -20,12 +16,48 @@ namespace TaskApp.MVVM.ViewModels
         {
             FileData();
             Tasks.CollectionChanged += Tasks_CollectionChanged;
+
+            // Initialize the Tasks collection within each Category
+            foreach (var category in Categories)
+            {
+                category.Tasks = new ObservableCollection<MyTask>(Tasks.Where(task => task.CategoryId == category.Id));
+                category.UpdateTotalTasks();
+            }
         }
 
         private void Tasks_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            UpdateData();
+            // Handle tasks collection changes
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (MyTask task in e.NewItems)
+                {
+                    Category category = Categories.FirstOrDefault(c => c.Id == task.CategoryId);
+                    if (category != null)
+                    {
+                        category.Tasks.Add(task);
+                        category.PendingTasks = category.Tasks.Count(t => !t.Completed);
+                        category.Percentage = (float)category.Tasks.Count(t => t.Completed) / category.Tasks.Count;
+                        category.UpdateTotalTasks();
+                    }
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (MyTask task in e.OldItems)
+                {
+                    Category category = Categories.FirstOrDefault(c => c.Id == task.CategoryId);
+                    if (category != null)
+                    {
+                        category.Tasks.Remove(task);
+                        category.PendingTasks = category.Tasks.Count(t => !t.Completed);
+                        category.Percentage = (float)category.Tasks.Count(t => t.Completed) / category.Tasks.Count;
+                        category.UpdateTotalTasks();
+                    }
+                }
+            }
         }
+
 
         private void FileData()
         {
@@ -42,7 +74,7 @@ namespace TaskApp.MVVM.ViewModels
                 {
                     Id = 2,
                     CategoryName = "School/Work",
-                    Color = "#7393B3"
+                    Color = "#007BFF"
                 },
 
                 new Category
@@ -51,10 +83,9 @@ namespace TaskApp.MVVM.ViewModels
                     CategoryName = "Shopping",
                     Color = "#008000"
                 },
-
             };
 
-            Tasks = new ObservableCollection<MyTask>
+            Tasks = new ObservableCollection<MyTask>()
             {
                 new MyTask
                 {
@@ -103,9 +134,8 @@ namespace TaskApp.MVVM.ViewModels
                     TaskName = "Buy Milk",
                     Completed = false,
                     CategoryId = 3,
-                }
+                },
             };
-
             UpdateData();
         }
 
@@ -114,29 +144,29 @@ namespace TaskApp.MVVM.ViewModels
             foreach (var c in Categories)
             {
                 var tasks = from t in Tasks
-                           where t.CategoryId == c.Id
-                           select t;
+                            where t.CategoryId == c.Id
+                            select t;
 
                 var completed = from t in tasks
                                 where t.Completed == true
                                 select t;
 
-                var noComleted = from t in tasks
-                                 where t.Completed == false
-                                 select t;
+                var noCompleted = from t in tasks
+                                  where t.Completed == false
+                                  select t;
 
-                c.PendingTasks = noComleted.Count();
+                c.PendingTasks = noCompleted.Count();
                 c.Percentage = (float)completed.Count() / (float)tasks.Count();
             }
 
             foreach (var t in Tasks)
             {
-                var catColor = 
+                var catColor =
                     (
                         from c in Categories
                         where c.Id == t.CategoryId
                         select c.Color
-                     ).FirstOrDefault();
+                    ).FirstOrDefault();
                 t.TaskColor = catColor;
             }
         }

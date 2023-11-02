@@ -1,9 +1,7 @@
 ﻿using PropertyChanged;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace TaskApp.MVVM.Models
 {
@@ -16,5 +14,44 @@ namespace TaskApp.MVVM.Models
         public int PendingTasks { get; set; }
         public float Percentage { get; set; }
         public bool IsSelected { get; set; }
+        public ObservableCollection<MyTask> Tasks { get; set; }
+
+        private int totalTasks;
+
+        public int TotalTasks
+        {
+            get { return totalTasks; }
+            set
+            {
+                if (totalTasks != value)
+                {
+                    totalTasks = value;
+                }
+            }
+        }
+
+        public Category()
+        {
+            // Initialize your Tasks collection as needed
+            Tasks = new ObservableCollection<MyTask>();
+            UpdateTotalTasks();
+        }
+
+        public void AddTask(MyTask task)
+        {
+            Tasks.Add(task);
+            UpdateTotalTasks();
+        }
+
+        public void RemoveTask(MyTask task)
+        {
+            Tasks.Remove(task);
+            UpdateTotalTasks();
+        }
+
+        public void UpdateTotalTasks()
+        {
+            TotalTasks = Tasks.Count;
+        }
     }
 }

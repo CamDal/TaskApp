@@ -23,7 +23,16 @@
                         <Grid Padding="10">
                             <RoundRectangle />
                             <VerticalStackLayout Spacing="10" Padding="15">
-                                <Label StyleClass="LightBlue" Text="{Binding PendingTasks, StringFormat='{0} Tasks'}"/>
+                                <Label StyleClass="LightBlue" TextColor="Black">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding PendingTasks}" FontAttributes="None" />
+                                            <Span Text="/" FontAttributes="None" />
+                                            <Span Text="{Binding TotalTasks}" FontAttributes="None" />
+                                            <Span Text=" tasks completed" FontAttributes="None" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
                                 <Label StyleClass="DarkBlue, CardTitle" Text="{Binding CategoryName}"/>
                                 <ProgressBar Progress="{Binding Percentage}" ProgressColor="{Binding Color, Converter={StaticResource ColorConverter}}"/>
                             </VerticalStackLayout>
@@ -31,10 +40,11 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
         </Grid>
         
         <Grid Grid.Row="2" RowDefinitions=".2*,.8*">
-            <Label StyleClass="LightBlue, SubHeader" Text="Pending Tasks"/>
+            <Label StyleClass="LightBlue, SubHeader" Text="Pending Tasks" TextColor="Black"/>
             <CollectionView Grid.Row="1" ItemsSource="{Binding Tasks}" ItemsUpdatingScrollMode="KeepLastItemInView">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
