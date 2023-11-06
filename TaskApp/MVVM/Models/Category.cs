@@ -5,6 +5,7 @@ using System.ComponentModel;
 
 namespace TaskApp.MVVM.Models
 {
+    //Setting Category Properties
     [AddINotifyPropertyChangedInterface]
     public class Category
     {
@@ -32,23 +33,26 @@ namespace TaskApp.MVVM.Models
 
         public Category()
         {
-            // Initialize your Tasks collection as needed
+            // Initialize the Tasks collection and update total tasks
             Tasks = new ObservableCollection<MyTask>();
             UpdateTotalTasks();
         }
 
+        // Method to add a task to this category
         public void AddTask(MyTask task)
         {
             Tasks.Add(task);
             UpdateTotalTasks();
         }
-
+        
+        // Method to remove a task from this category
         public void RemoveTask(MyTask task)
         {
             Tasks.Remove(task);
             UpdateTotalTasks();
         }
 
+        // Method to update the total number of tasks in this category
         public void UpdateTotalTasks()
         {
             TotalTasks = Tasks.Count;

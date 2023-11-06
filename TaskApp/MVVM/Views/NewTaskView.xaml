@@ -4,14 +4,17 @@
              x:Class="TaskApp.MVVM.Views.NewTaskView"
              Title="Add New Task">
 
+    <!-- Define the grid row definitions -->
     <Grid RowDefinitions="Auto, Auto, *, Auto">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
+        <!-- Label for entering a new task -->
         <Label Text="Enter New Task:" FontSize="18" Margin="15" Grid.Row="0" Grid.Column="0" />
         <Entry Placeholder="Enter New Task" Text="{Binding Task}" Style="{StaticResource Task}" Grid.Row="1" Grid.Column="0" />
 
+        <!-- Label for selecting a category -->
         <Label Text="Select Category:" FontSize="18" Margin="15" Grid.Row="2" Grid.Column="0" />
 
         <CollectionView Grid.Row="3" Margin="15" HeightRequest="550" ItemsSource="{Binding Categories}" Grid.Column="0">
@@ -21,16 +24,28 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame>
+                        <!-- RadioButton for selecting a category -->
                         <RadioButton Content="{Binding CategoryName}" GroupName="Category" IsChecked="{Binding IsSelected}" />
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <HorizontalStackLayout Grid.Row="4" Margin="10" Spacing="15" VerticalOptions="Center" HorizontalOptions="CenterAndExpand">
+        <!-- Finish Date -->
+        <Label Text="Enter Finish Date:" FontSize="18" Grid.Row="4" Grid.Column="0" Margin="15,220,20,0" />
+        <DatePicker BindingContext="{Binding FinishDate}" Grid.Row="5" Margin="15,250,136,0" VerticalOptions="Start" HorizontalOptions="Start" />
+
+        <!-- Set a reminder -->
+        <Label Text="Set a reminder?" TextColor="Black" FontSize="18" Grid.Row="5" Grid.Column="0" Margin="15,320,20,0" />
+        <CheckBox BindingContext="{Binding Reminder}" Grid.Row="5" Margin="135,313,0,0" VerticalOptions="Start" HorizontalOptions="Start"/>
+        
+        <!-- Button for adding a new task -->
+        <HorizontalStackLayout Grid.Row="5" Margin="0,200,0,0" Spacing="15" VerticalOptions="Center" HorizontalOptions="CenterAndExpand">
             <Button x:Name="btnAddTask" CornerRadius="15" Text="Add Task" Clicked="btnAddTask_Clicked"/>
         </HorizontalStackLayout>
 
-        <Button Grid.Row="4" Grid.RowSpan="8" Grid.Column="1" x:Name="btnAddCategory" CornerRadius="15" Text="Add Category" Clicked="btnAddCategory_Clicked" HeightRequest="40" WidthRequest="120" VerticalOptions="Start" HorizontalOptions="End" Margin="0,320,136,0"/>
+        <Label Text="Enter Finish Date:" FontSize="18" Grid.Row="8" Grid.Column="0" Margin="15,220,20,0" />
+        <!-- Button for adding a new category -->
+        <Button Grid.Row="5" Grid.RowSpan="8" Grid.Column="1" x:Name="btnAddCategory" CornerRadius="15" Text="Add Category" Clicked="btnAddCategory_Clicked" HeightRequest="40" WidthRequest="120" VerticalOptions="Start" HorizontalOptions="End" Margin="0,420,136,0"/>
     </Grid>
 </ContentPage>

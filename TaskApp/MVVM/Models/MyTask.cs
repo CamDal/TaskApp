@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace TaskApp.MVVM.Models
 {
+    //Setting MyTask Properties
     [AddINotifyPropertyChangedInterface]
     public class MyTask
     {
@@ -14,5 +15,7 @@ namespace TaskApp.MVVM.Models
         public bool Completed { get; set; }
         public int CategoryId { get; set; }
         public string TaskColor { get; set; }
+        public DateTime FinishDate { get; set; }
+        public bool reminder { get; set; }
     }
 }

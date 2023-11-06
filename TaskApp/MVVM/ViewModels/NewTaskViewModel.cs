@@ -14,6 +14,7 @@ public class NewTaskViewModel
 
     public NewTaskViewModel()
     {
+        //Categories with sample data
         Categories = new ObservableCollection<Category>()
         {
             new Category
@@ -36,6 +37,7 @@ public class NewTaskViewModel
             }
         };
 
+        //Tasks with sample data
         Tasks = new ObservableCollection<MyTask>()
         {
             new MyTask
@@ -93,6 +95,7 @@ public class NewTaskViewModel
         }
     }
 
+    //Method to add tasks
    public void AddTask()
     {
         if (SelectedCategory != null)
